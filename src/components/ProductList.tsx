@@ -1,48 +1,80 @@
 import { useQuery } from "@tanstack/react-query";
-import { Image, Input, Space, Table } from "antd";
+import { Image, Input, Select, Space, Table, Radio, Typography } from "antd";
+import { SearchOutlined } from '@ant-design/icons';
 import Header from "./Header";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+
+const { Title } = Typography;
 
 interface Product {
   id: string;
   name: string;
   price: number;
 }
+type FilterType = 'contains' | 'startsWith' | 'exact';
+
 function ProductList() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
+  const [filterType, setFilterType] = useState<FilterType>('contains');
 
-  // Get search term from URL
+  // Get search params from URL
   const name = searchParams.get("name") || "";
+  const type = (searchParams.get("type") as FilterType) || 'contains';
 
-  // Update local state when URL search param changes
+  // Update local state when URL search params change
   useEffect(() => {
     setSearchValue(name);
-  }, [name]);
+    setFilterType(type);
+  }, [name, type]);
 
   const fetchProducts = async () => {
-    const res = await fetch(
-      `http://localhost:3001/products?name_like=${name}`
-    );
+    const res = await fetch('http://localhost:3001/products');
     return res.json();
   };
 
-  // Fetch products when search term changes
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["products", name], // Include name in queryKey to refetch when it changes
+  // Fetch all products
+  const { data: allProducts = [], isLoading, error } = useQuery({
+    queryKey: ["products"],
     queryFn: fetchProducts,
   });
 
+  // Filter products based on search criteria
+  const filteredProducts = allProducts.filter((product: Product) => {
+    if (!name) return true;
+    
+    const searchTerm = name.toLowerCase();
+    const productName = product.name.toLowerCase();
+
+    switch (filterType) {
+      case 'contains':
+        return productName.includes(searchTerm);
+      case 'startsWith':
+        return productName.startsWith(searchTerm);
+      case 'exact':
+        return productName === searchTerm;
+      default:
+        return true;
+    }
+  });
+
   const handleSearch = (value: string) => {
-    // Update URL with new search term
     const params = new URLSearchParams(searchParams);
     if (value) {
       params.set("name", value);
+      params.set("type", filterType);
     } else {
       params.delete("name");
+      params.delete("type");
     }
+    setSearchParams(params);
+  };
+
+  const handleFilterTypeChange = (type: FilterType) => {
+    setFilterType(type);
+    const params = new URLSearchParams(searchParams);
+    params.set("type", type);
     setSearchParams(params);
   };
   const columns = [
@@ -77,27 +109,62 @@ function ProductList() {
     <div>
       <Header />
       <div style={{ padding: '20px' }}>
+        <Title level={3} style={{ marginBottom: '24px' }}>Danh sách sản phẩm</Title>
+        
         <Space direction="vertical" style={{ width: '100%', marginBottom: '20px' }}>
-          <Input.Search
-            placeholder="Tìm kiếm sản phẩm..."
-            allowClear
-            enterButton="Tìm kiếm"
-            size="large"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onSearch={handleSearch}
-            style={{ maxWidth: '500px' }}
-          />
+          <Space>
+            <Input
+              placeholder="Nhập tên sản phẩm..."
+              prefix={<SearchOutlined />}
+              size="large"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onPressEnter={(e) => handleSearch(e.currentTarget.value)}
+              style={{ width: 300 }}
+            />
+            <Select
+              value={filterType}
+              onChange={handleFilterTypeChange}
+              style={{ width: 180 }}
+              size="large"
+              options={[
+                { value: 'contains', label: 'Chứa từ khóa' },
+                { value: 'startsWith', label: 'Bắt đầu bằng' },
+                { value: 'exact', label: 'Chính xác' },
+              ]}
+            />
+            <button 
+              onClick={() => handleSearch(searchValue)}
+              style={{
+                padding: '8px 20px',
+                fontSize: '16px',
+                backgroundColor: '#1890ff',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Tìm kiếm
+            </button>
+          </Space>
         </Space>
         
         {error && <p style={{ color: 'red' }}>Lỗi: {error.message}</p>}
         
         <Table
-          dataSource={data}
+          dataSource={filteredProducts}
           columns={columns}
           rowKey={"id"}
           loading={isLoading}
-          pagination={{ pageSize: 5 }}
+          pagination={{ 
+            pageSize: 5,
+            showSizeChanger: false,
+            showTotal: (total) => `Tổng ${total} sản phẩm`
+          }}
+          locale={{
+            emptyText: name ? 'Không tìm thấy sản phẩm nào' : 'Không có dữ liệu'
+          }}
         />
       </div>
     </div>
