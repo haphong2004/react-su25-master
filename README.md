@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Lập trình Front-End Framework 2 - WEB2091
 
 # Hướng dẫn cài đặt dự án Vite + React + TypeScript
@@ -133,3 +134,6 @@ my-react-app/
 - [Tài liệu pnpm](https://pnpm.io/)
 
 Chúc bạn thành công với dự án React của mình!
+=======
+# react-su25-master
+>>>>>>> 8be73e025ab300384b2e04c084e9b892e4851957
