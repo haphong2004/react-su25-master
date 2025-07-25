@@ -17,6 +17,11 @@ const items: MenuItem[] = [
     icon: <HomeOutlined />,
   },
   {
+    label: "Create Product",
+    key: "/products/create",
+    icon: <ShopFilled />,
+  },
+  {
     label: "Products",
     key: "/products",
     icon: <ShopFilled />,
@@ -24,6 +29,26 @@ const items: MenuItem[] = [
   {
     label: "Categories",
     key: "/categories",
+    icon: <UnorderedListOutlined />,
+  },
+  {
+    label: "Categories Create",
+    key: "/categories/create",
+    icon: <UnorderedListOutlined />,
+  },
+  {
+    label: "User List",
+    key: "/users",
+    icon: <UnorderedListOutlined />,
+  },
+  {
+    label: "User Create",
+    key: "/users/create",
+    icon: <UnorderedListOutlined />,
+  },
+  {
+    label: "Brand List",
+    key: "/brands",
     icon: <UnorderedListOutlined />,
   },
 ];

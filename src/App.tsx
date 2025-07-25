@@ -3,6 +3,11 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CategoryList from "./components/CategoryList";
 import ProductDetail from "./components/ProductDetail";
+import ProductCreate from "./components/ProductCreate";
+import CategoryCreate from "./components/CategoryCreate";
+import UserList from "./components/UserList";
+import UserCreate from "./components/UserCreate";
+import BrandList from "./components/BrandList";
 
 function App() {
   const router = createBrowserRouter([
@@ -15,6 +20,10 @@ function App() {
       element: <ProductList />,
     },
     {
+      path: "/products/create",
+      element: <ProductCreate />,
+    },
+    {
       path: "/product/detail/:productId",
       element: <ProductDetail />,
     },
@@ -23,16 +32,24 @@ function App() {
       element: <CategoryList />,
     },
     {
+      path: "/categories/create",
+      element: <CategoryCreate />,
+    },
+    {
       path: "/orders",
       element: <CategoryList />,
     },
     {
       path: "/users",
-      element: <CategoryList />,
+      element: <UserList />,
+    },
+    {
+      path: "/users/create",
+      element: <UserCreate />,
     },
     {
       path: "/brands",
-      element: <CategoryList />,
+      element: <BrandList />,
     },
   ]);
   return (

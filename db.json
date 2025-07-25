@@ -17,6 +17,12 @@
       "name": "Xiaomi Mi 14",
       "price": 599,
       "image": "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
+    },
+    {
+      "name": "phong",
+      "price": "45",
+      "image": "https://picsum.photos/200/120",
+      "id": 4
     }
   ],
   "categories": [
@@ -31,6 +37,75 @@
     {
       "id": 3,
       "name": "Laptops"
+    },
+    {
+      "name": "ipad",
+      "description": "",
+      "id": 4
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "email": "admin@example.com",
+      "role": "admin",
+      "status": "active",
+      "password": "123456"
+    },
+    {
+      "id": "2",
+      "username": "user1",
+      "email": "user1@example.com",
+      "role": "user",
+      "status": "active",
+      "password": "123456"
+    },
+    {
+      "id": "3",
+      "username": "user2",
+      "email": "user2@example.com",
+      "role": "user",
+      "status": "inactive",
+      "password": "123456"
+    },
+    {
+      "username": "sfdcxc",
+      "email": "haminhphong2503@gmail.com",
+      "password": "123456",
+      "role": "user",
+      "status": "active",
+      "id": "1753426834801"
+    }
+  ],
+  "brands": [
+    {
+      "id": "1",
+      "name": "Apple",
+      "description": "Công nghệ và điện tử tiêu dùng",
+      "logo": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
+      "status": "active"
+    },
+    {
+      "id": "2",
+      "name": "Samsung",
+      "description": "Điện thoại thông minh và thiết bị điện tử",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/1280px-Samsung_Logo.svg.png",
+      "status": "active"
+    },
+    {
+      "id": "3",
+      "name": "Xiaomi",
+      "description": "Điện thoại và thiết bị thông minh giá rẻ",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Xiaomi_logo_%282021-%29.svg/1200px-Xiaomi_logo_%282021-%29.svg.png",
+      "status": "active"
+    },
+    {
+      "id": "4",
+      "name": "Oppo",
+      "description": "Điện thoại thông minh và phụ kiện",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Oppo_Logo_2019.svg/1200px-Oppo_Logo_2019.svg.png",
+      "status": "inactive"
     }
   ]
 }
