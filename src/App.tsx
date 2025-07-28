@@ -23,7 +23,7 @@ function App() {
       element: <CategoryList />,
     },
     {
-      path: "/orders",
+       path: "/orders",
       element: <CategoryList />,
     },
     {

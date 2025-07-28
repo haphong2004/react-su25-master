@@ -3,6 +3,7 @@ import {
   HomeOutlined,
   ShopFilled,
   UnorderedListOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
@@ -22,6 +23,16 @@ const items: MenuItem[] = [
     icon: <ShopFilled />,
   },
   {
+    label: "Create Product",
+    key: "/products/create",
+    icon: <ShopFilled />,
+  },
+  {
+    label: "Users",
+    key: "/users",
+    icon: <UserOutlined />,
+  },
+  {
     label: "Categories",
     key: "/categories",
     icon: <UnorderedListOutlined />,
@@ -32,7 +43,7 @@ const Header: React.FC = () => {
   const [current, setCurrent] = useState("home");
   const navigate = useNavigate();
 
-  const onClick: MenuProps["onClick"] = (e) => {
+  const onClick: MenuProps["onClick"] = (e: any) => {
     setCurrent(e.key);
     navigate(e.key);
   };
