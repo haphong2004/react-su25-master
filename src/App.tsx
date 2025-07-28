@@ -8,12 +8,13 @@ import CategoryCreate from "./components/CategoryCreate";
 import UserList from "./components/UserList";
 import UserCreate from "./components/UserCreate";
 import BrandList from "./components/BrandList";
+import Homepage from "./components/Homepage";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <ProductList />,
+      element: <Homepage />,
     },
     {
       path: "/products",
