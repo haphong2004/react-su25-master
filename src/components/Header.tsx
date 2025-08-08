@@ -5,8 +5,8 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Menu } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Button, Menu } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -51,24 +51,65 @@ const items: MenuItem[] = [
     key: "/brands",
     icon: <UnorderedListOutlined />,
   },
+  {
+    label: "Product Update",
+    key: "/product/update",
+    icon: <UnorderedListOutlined />,
+  },
+  {
+    label: "Login",
+    key: "/login",
+    icon: <UnorderedListOutlined />,
+  },
+  {
+    label: "Register",
+    key: "/register",
+    icon: <UnorderedListOutlined />,
+  },
 ];
 
 const Header: React.FC = () => {
   const [current, setCurrent] = useState("home");
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-  const onClick: MenuProps["onClick"] = (e) => {
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Clear all authentication related data
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    // Force a full page reload to reset all application state
+    window.location.href = '/login';
+  };
+
+  const onClick: MenuProps["onClick"] = (e: any) => {
     setCurrent(e.key);
     navigate(e.key);
   };
 
   return (
-    <Menu
-      onClick={onClick}
-      selectedKeys={[current]}
-      mode="horizontal"
-      items={items}
-    />
+    <div>
+      <Menu
+        onClick={onClick}
+        selectedKeys={[current]}
+        mode="horizontal"
+        items={items}
+      />
+      <div>
+        {token ? (
+          <Button onClick={handleLogout}>Đăng xuất</Button>
+        ) : (
+          <>
+            <Link to="/login" style={{ marginRight: 10 }}>
+              <Button>Đăng nhập</Button>
+            </Link>
+            <Link to="/register">
+              <Button>Đăng ký</Button>
+            </Link>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -1,8 +1,9 @@
 import { Button, Form, Input, InputNumber, Select, Card, Typography, message, Space } from "antd";
-import { useCreate } from "../hooks/useCreate";
 import Header from "./Header";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useOne } from "../hooks/useOne";
+import { useUpdate } from "../hooks/useUpdate";
 import axios from "axios";
 
 const { Title } = Typography;
@@ -28,13 +29,14 @@ interface ProductFormValues {
   categoryId?: number | string;
 }
 
-const ProductCreate: React.FC = () => {
+const ProductUpdate: React.FC = () => {
   const [form] = Form.useForm();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const createMutation = useCreate("products");
+  const { data: product } = useOne("products", id);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +50,15 @@ const ProductCreate: React.FC = () => {
         
         setBrands(brandsRes.data);
         setCategories(categoriesRes.data);
+
+        // Set form values after data is loaded
+        if (product) {
+          form.setFieldsValue({
+            ...product,
+            brandId: product.brandId?.toString(),
+            categoryId: product.categoryId?.toString()
+          });
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
         message.error('Không thể tải dữ liệu thương hiệu và danh mục');
@@ -57,13 +68,15 @@ const ProductCreate: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [product, form]);
 
-  const onSubmit = async (values: ProductFormValues) => {
+  const updateMutation = useUpdate(id || '');
+
+  const handleSubmit = async (values: ProductFormValues) => {
     try {
       setLoading(true);
       // Convert string IDs to appropriate types
-      const productData = {
+      const updatedValues = {
         ...values,
         price: Number(values.price),
         brandId: values.brandId || null,
@@ -76,13 +89,12 @@ const ProductCreate: React.FC = () => {
           null
       };
       
-      await createMutation.mutateAsync(productData);
-      message.success('Tạo sản phẩm thành công');
-      form.resetFields();
+      await updateMutation.mutateAsync(updatedValues);
+      message.success('Cập nhật sản phẩm thành công');
       navigate('/products');
     } catch (error) {
-      console.error('Error creating product:', error);
-      message.error('Có lỗi xảy ra khi tạo sản phẩm');
+      console.error('Error updating product:', error);
+      message.error('Có lỗi xảy ra khi cập nhật sản phẩm');
     } finally {
       setLoading(false);
     }
@@ -95,7 +107,7 @@ const ProductCreate: React.FC = () => {
         <Card 
           title={
             <Title level={3} style={{ margin: 0, textAlign: 'center' }}>
-              TẠO SẢN PHẨM MỚI
+              CHỈNH SỬA SẢN PHẨM
             </Title>
           }
           bordered={false}
@@ -104,7 +116,7 @@ const ProductCreate: React.FC = () => {
           <Form
             form={form}
             layout="vertical"
-            onFinish={onSubmit}
+            onFinish={handleSubmit}
             autoComplete="off"
             style={{ maxWidth: 800, margin: '0 auto' }}
           >
@@ -210,7 +222,7 @@ const ProductCreate: React.FC = () => {
                   size="large"
                   style={{ minWidth: 120 }}
                 >
-                  {loading ? 'Đang xử lý...' : 'Tạo mới'}
+                  {loading ? 'Đang xử lý...' : 'Cập nhật'}
                 </Button>
               </Space>
             </Form.Item>
@@ -221,4 +233,4 @@ const ProductCreate: React.FC = () => {
   );
 };
 
-export default ProductCreate;
+export default ProductUpdate;

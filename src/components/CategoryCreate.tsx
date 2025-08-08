@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Card, Form, Input, Button, Typography, Space, message } from 'antd';
+import { ArrowLeftOutlined, SaveOutlined } from '@ant-design/icons';
+
+const { Title, Text } = Typography;
+const { TextArea } = Input;
 
 interface Category {
   id?: number;
@@ -8,109 +13,117 @@ interface Category {
 }
 
 const CategoryCreate: React.FC = () => {
-  const [category, setCategory] = useState<Category>({
-    name: '',
-    description: ''
-  });
-  const [error, setError] = useState<string>('');
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setCategory(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!category.name.trim()) {
-      setError('Tên danh mục không được để trống');
-      return;
-    }
-
+  const onFinish = async (values: Category) => {
+    setLoading(true);
     try {
       const response = await fetch('http://localhost:3001/categories', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(category),
+        body: JSON.stringify({
+          ...values,
+          id: Date.now()
+        }),
       });
       
-      if (response.ok) {
-        // Chuyển hướng về trang danh sách danh mục sau khi thêm thành công
-        navigate('/categories');
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to add category');
+      if (!response.ok) {
+        throw new Error('Không thể thêm danh mục');
       }
-    } catch (err) {
-      setError('Có lỗi xảy ra khi thêm danh mục');
-      console.error('Error adding category:', err);
+      
+      message.success('Thêm danh mục thành công!');
+      navigate('/categories');
+    } catch (error) {
+      console.error('Lỗi khi thêm danh mục:', error);
+      message.error('Có lỗi xảy ra khi thêm danh mục');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Thêm Danh Mục Mới</h1>
+    <div style={{ maxWidth: 800, margin: '24px auto', padding: '0 16px' }}>
+      <Button 
+        type="text" 
+        icon={<ArrowLeftOutlined />} 
+        onClick={() => navigate(-1)}
+        style={{ marginBottom: 16 }}
+      >
+        Quay lại
+      </Button>
       
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-      
-      <form onSubmit={handleSubmit} className="max-w-lg">
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
-            Tên danh mục <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="name"
+      <Card 
+        title={
+          <Title level={3} style={{ margin: 0 }}>
+            THÊM DANH MỤC MỚI
+          </Title>
+        }
+        bordered={false}
+        style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          autoComplete="off"
+          style={{ maxWidth: 600, margin: '0 auto' }}
+        >
+          <Form.Item
+            label="Tên danh mục"
             name="name"
-            value={category.name}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Nhập tên danh mục"
-          />
-        </div>
-        
-        <div className="mb-6">
-          <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">
-            Mô tả
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            value={category.description}
-            onChange={handleChange}
-            rows={4}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Nhập mô tả danh mục"
-          />
-        </div>
-        
-        <div className="flex items-center">
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            rules={[
+              { required: true, message: 'Vui lòng nhập tên danh mục' },
+              { min: 3, message: 'Tên danh mục phải có ít nhất 3 ký tự' },
+              { max: 50, message: 'Tên danh mục không vượt quá 50 ký tự' }
+            ]}
           >
-            Thêm Danh Mục
-          </button>
+            <Input 
+              size="large" 
+              placeholder="Nhập tên danh mục" 
+              style={{ borderRadius: 6 }}
+            />
+          </Form.Item>
           
-          <button
-            type="button"
-            onClick={() => navigate('/categories')}
-            className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          <Form.Item
+            label="Mô tả"
+            name="description"
+            rules={[
+              { max: 500, message: 'Mô tả không vượt quá 500 ký tự' }
+            ]}
           >
-            Hủy
-          </button>
-        </div>
-      </form>
+            <TextArea 
+              rows={4} 
+              placeholder="Nhập mô tả cho danh mục (không bắt buộc)"
+              style={{ borderRadius: 6 }}
+            />
+          </Form.Item>
+          
+          <Form.Item style={{ marginTop: 32, marginBottom: 0 }}>
+            <Space>
+              <Button 
+                type="primary" 
+                htmlType="submit" 
+                icon={<SaveOutlined />}
+                loading={loading}
+                style={{ minWidth: 120, height: 40 }}
+              >
+                Lưu lại
+              </Button>
+              <Button 
+                onClick={() => form.resetFields()}
+                disabled={loading}
+                style={{ height: 40 }}
+              >
+                Đặt lại
+              </Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Card>
     </div>
   );
 };

@@ -1,16 +1,12 @@
 {
   "products": [
     {
-      "id": 1,
-      "name": "iPhone 15",
-      "price": 999,
-      "image": "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
-    },
-    {
-      "id": 2,
-      "name": "Samsung Galaxy S24",
+      "name": "Samsung Galaxy S245",
+      "image": "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630",
       "price": 899,
-      "image": "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
+      "brandId": "2",
+      "categoryId": 2,
+      "id": 2
     },
     {
       "id": 3,
@@ -23,6 +19,12 @@
       "price": "45",
       "image": "https://picsum.photos/200/120",
       "id": 4
+    },
+    {
+      "name": "ddf",
+      "price": "2222",
+      "image": "https://picsum.photos/200/120",
+      "id": 5
     }
   ],
   "categories": [
@@ -76,6 +78,50 @@
       "role": "user",
       "status": "active",
       "id": "1753426834801"
+    },
+    {
+      "username": "phogn",
+      "email": "haminhphong2503@gmail.com",
+      "password": "12345p",
+      "role": "user",
+      "status": "active",
+      "id": "1753691393611"
+    },
+    {
+      "email": "haminhphong2503@gmail.com",
+      "password": "12345678",
+      "confirmPassword": "12345678",
+      "id": "1754632942100",
+      "role": "user",
+      "status": "active",
+      "username": "haminhphong2503"
+    },
+    {
+      "email": "haminhphong2004@gmail.com",
+      "password": "Pppppp1",
+      "confirmPassword": "Pppppp1",
+      "id": "1754637601760",
+      "role": "user",
+      "status": "active",
+      "username": "haminhphong2004"
+    },
+    {
+      "email": "phong2@gmail.com",
+      "password": "Abc123",
+      "confirmPassword": "Abc123",
+      "id": "1754640581103",
+      "role": "user",
+      "status": "active",
+      "username": "phong2"
+    },
+    {
+      "email": "phong1234@gmail.com",
+      "password": "P12345a",
+      "confirmPassword": "P12345a",
+      "id": "1754641982979",
+      "role": "user",
+      "status": "active",
+      "username": "phong1234"
     }
   ],
   "brands": [

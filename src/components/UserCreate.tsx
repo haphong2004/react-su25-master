@@ -35,7 +35,7 @@ const UserCreate: React.FC = () => {
           id: Date.now().toString(), // Tạo ID tạm thời
         }),
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to create user');
       }
@@ -72,20 +72,20 @@ const UserCreate: React.FC = () => {
 
   return (
     <div className="p-6">
-      <Button 
-        type="text" 
-        icon={<ArrowLeftOutlined />} 
+      <Button
+        type="text"
+        icon={<ArrowLeftOutlined />}
         onClick={() => navigate(-1)}
         className="mb-4"
       >
         Quay lại
       </Button>
-      
+
       <Card className="max-w-2xl mx-auto">
         <Title level={3} className="text-center mb-6">
           <UserAddOutlined /> Thêm người dùng mới
         </Title>
-        
+
         <Form
           form={form}
           layout="vertical"
@@ -162,9 +162,9 @@ const UserCreate: React.FC = () => {
           </Form.Item>
 
           <Form.Item className="text-center">
-            <Button 
-              type="primary" 
-              htmlType="submit" 
+            <Button
+              type="primary"
+              htmlType="submit"
               loading={isSubmitting}
               className="w-full max-w-xs"
             >
